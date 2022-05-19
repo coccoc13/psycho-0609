@@ -1,14 +1,31 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-
-<taglib xmlns="http://java.sun.com/xml/ns/javaee"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
-        version="2.1">
-
-    <tlib-version>1.0</tlib-version>
-    <short-name>myshortname</short-name>
-    <uri>http://mycompany.com</uri>
-
-    <!-- Invoke 'Generate' action to add tags or functions -->
-
-</taglib>
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" packages="jp.co.welmo.milmonet">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy/MM/dd HH:mm:ss,SSS} [%-p] [%t] %u_id %m%n" charset="UTF-8"/>
+        </Console>
+        <RollingFile name="file" fileName="/var/log/tomcat/mimonet.log"
+                     filePattern="/var/log/tomcat/mimonet.%d{yyyyMMdd}.gz" charset="UTF-8">
+            <PatternLayout>
+                <Pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%-p] [%t] %u_id %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy filePattern="/var/log/tomcat/my_page.%d{yyyyMMdd}.gz"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="console"/>
+        </Root>
+        <logger name="com.example.projectdemo.controller">
+            <appender-ref ref="file"/>
+        </logger>
+        <logger name="com.example.projectdemo.service">
+            <appender-ref ref="file"/>
+        </logger>
+        <logger name="com.example.projectdemo.repository">
+            <appender-ref ref="file"/>
+        </logger>
+    </Loggers>
+</Configuration>
