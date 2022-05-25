@@ -1,10 +1,10 @@
 package com.example.projectdemo.exception;
 
-public class InformationExisted extends RuntimeException{
+public class ItemIsExisted extends RuntimeException{
 
     private String message;
 
-    public InformationExisted(String message) {
+    public ItemIsExisted(String message) {
         super(message);
         this.message = message;
     }

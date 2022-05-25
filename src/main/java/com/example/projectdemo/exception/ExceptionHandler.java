@@ -23,16 +23,16 @@ public class ExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @org.springframework.web.bind.annotation.ExceptionHandler(InformationNotFound.class)
-    public Map<String, Object> handle(InformationNotFound e) {
+    @org.springframework.web.bind.annotation.ExceptionHandler(ItemNotFound.class)
+    public Map<String, Object> handle(ItemNotFound e) {
         Map<String, Object> result = new HashMap<>();
         result.put("message", e.getMessage());
         return result;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @org.springframework.web.bind.annotation.ExceptionHandler(InformationExisted.class)
-    public Map<String, Object> handle(InformationExisted e) {
+    @org.springframework.web.bind.annotation.ExceptionHandler(ItemIsExisted.class)
+    public Map<String, Object> handle(ItemIsExisted e) {
         Map<String, Object> result = new HashMap<>();
         result.put("message", e.getMessage());
         return result;
@@ -41,6 +41,14 @@ public class ExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @org.springframework.web.bind.annotation.ExceptionHandler(InputRequireEx.class)
     public Map<String, Object> handle(InputRequireEx e) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("message", e.getMessage());
+        return result;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @org.springframework.web.bind.annotation.ExceptionHandler(ItemCannotDelete.class)
+    public Map<String, Object> handle(ItemCannotDelete e) {
         Map<String, Object> result = new HashMap<>();
         result.put("message", e.getMessage());
         return result;

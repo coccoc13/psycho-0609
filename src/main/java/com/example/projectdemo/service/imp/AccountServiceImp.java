@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImp implements IAccountService {
@@ -27,5 +28,10 @@ public class AccountServiceImp implements IAccountService {
         return new AccountPrincipal(account.getId(), account.getName(), account.getRoleType().getValue(), account.getUsername(), account.getPassword(),
                 true, true, true, true,
                 Collections.singleton(authorities));
+    }
+
+    @Override
+    public Account findByUsername(String username) {
+        return repository.findAccountByUsername(username);
     }
 }

@@ -2,7 +2,6 @@ package com.example.projectdemo.service.imp;
 
 import com.example.projectdemo.model.entity.Information;
 import com.example.projectdemo.model.type.InformationStatusType;
-import com.example.projectdemo.model.type.InformationType;
 import com.example.projectdemo.repository.AccountRepository;
 import com.example.projectdemo.repository.InformationRepository;
 import com.example.projectdemo.service.inter.IInformationService;
@@ -38,7 +37,7 @@ public class InformationServiceImp implements IInformationService {
 
     @Override
     public Boolean existsByTypeAndUrlOut(Integer categoryId, String urlOut) {
-        return informationRepository.existsByCategoryIdAndUrlOut(categoryId, urlOut);
+        return informationRepository.existsByCategoryIdAndUrlOut(categoryId, urlOut).isPresent();
     }
 
     @Override
@@ -54,6 +53,16 @@ public class InformationServiceImp implements IInformationService {
     @Override
     public Optional<Information> findById(Integer id) {
         return informationRepository.findById(id);
+    }
+
+    @Override
+    public Integer countByCategoryId(Integer id) {
+        return informationRepository.countAllByCategoryId(id);
+    }
+
+    @Override
+    public List<Information> getAllByAccountId(Integer id) {
+        return informationRepository.getAllByAccount_Id(id);
     }
 
     @Override

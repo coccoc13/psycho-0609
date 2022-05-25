@@ -15,5 +15,7 @@ public interface IInformationService {
     Boolean existsByTypeAndUrlInEdit(Integer categoryId, String urlIn, Integer id);
     Boolean existsByTypeAndUrlOutEdit(Integer categoryId, String urlOut, Integer id);
     Optional<Information> findById(Integer id);
+    Integer countByCategoryId(Integer id);
+    List<Information> getAllByAccountId(Integer id);
     void delete(Integer id);
 }

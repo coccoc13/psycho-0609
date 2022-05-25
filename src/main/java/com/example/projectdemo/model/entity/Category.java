@@ -13,7 +13,7 @@ public class Category extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-
+    private DelFlag delFlag;
 
     @ManyToOne
     @JoinColumn(name = "account_id")

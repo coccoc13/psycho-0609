@@ -17,11 +17,26 @@ public class CategoryServiceImp implements ICategoryService {
 
     @Override
     public List<Category> getAll() {
-        return repository.findAll();
+        return repository.getAll();
     }
 
     @Override
     public Optional<Category> findById(Integer id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public Optional<Category> findAllByName(String name) {
+        return repository.findAllByName(name);
+    }
+
+    @Override
+    public Optional<Category> findAllByNameToEdit(String name, Integer id) {
+        return repository.findAllByNameToEdit(name, id);
+    }
+
+    @Override
+    public Category save(Category category) {
+        return repository.save(category);
     }
 }

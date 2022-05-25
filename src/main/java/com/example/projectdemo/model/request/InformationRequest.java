@@ -16,5 +16,6 @@ public class InformationRequest {
     private String urlIn;
     private String urlOut;
     private Integer categoryId;
+    private Integer status;
 
 }

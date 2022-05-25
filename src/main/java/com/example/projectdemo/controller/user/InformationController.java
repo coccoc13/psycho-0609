@@ -1,8 +1,8 @@
 package com.example.projectdemo.controller.user;
 
 import com.example.projectdemo.convertDTO.InformationConvertor;
-import com.example.projectdemo.exception.InformationExisted;
-import com.example.projectdemo.exception.InformationNotFound;
+import com.example.projectdemo.exception.ItemIsExisted;
+import com.example.projectdemo.exception.ItemNotFound;
 import com.example.projectdemo.model.dto.InformationListDTO;
 import com.example.projectdemo.model.entity.Account;
 import com.example.projectdemo.model.entity.Category;
@@ -34,8 +34,8 @@ public class InformationController {
     private ICategoryService categoryService;
 
     @GetMapping
-    public Object get(){
-        List<InformationListDTO> list = service.getAllByStatus(InformationStatusType.ENABLE)
+    public Object get() {
+        List<InformationListDTO> list = service.getAllByStatus(InformationStatusType.ACCEPT)
                 .stream()
                 .map(t -> {
                     t.setAccount(t.getAccount());
@@ -48,7 +48,7 @@ public class InformationController {
 
     @GetMapping("{id}")
     public Object getOne(@PathVariable Integer id) {
-        Information information = service.findById(id).orElseThrow(() -> new InformationNotFound("Information not found"));
+        Information information = service.findById(id).orElseThrow(() -> new ItemNotFound("Information not found"));
         return new ResponseEntity<>(InformationConvertor.toDTO(information), HttpStatus.OK);
     }
 
@@ -58,42 +58,45 @@ public class InformationController {
         AccountPrincipal userDetails = (AccountPrincipal) auth.getPrincipal();
         Category category = categoryService.findById(request.getCategoryId()).orElseThrow(Exception::new);
         Information information;
-        if(request.getId() != null){
-            information = service.findById(request.getId()).orElseThrow(() -> new InformationNotFound("Information not found"));
-            checkUrlEdit(category.getId(), information, request);
-            information.setUpdateAt(LocalDateTime.now());
-        }else{
-            checkUrl(category.getId(), request);
-            information = new Information();
-            information.setCreatedAt(LocalDateTime.now());
-        }
+        checkUrl(category.getId(), request);
+        information = new Information();
+        information.setCreatedAt(LocalDateTime.now());
         information.setCategory(category);
         information.setAccount(new Account(userDetails.getId()));
-        information.setStatus(InformationStatusType.DISABLE);
+        information.setStatus(InformationStatusType.WAITING);
         InformationConvertor.toEntity(information, request);
         service.save(information);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void checkUrl(Integer categoryId, InformationRequest request) throws Exception {
-        if(service.existsByTypeAndUrlIn(categoryId, request.getUrlIn())){
-            throw new InformationExisted("Url in is existed");
+//    @GetMapping("/contribution")
+//    public Object getUserContribution(){
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        AccountPrincipal userDetails = (AccountPrincipal) auth.getPrincipal();
+//        List<Information> list = service.getAllByAccountId(userDetails.getId());
+//        return new ResponseEntity<>(list.stream().map(InformationConvertor::toDTO).collect(Collectors.toList()), HttpStatus.OK);
+//    }
+
+//    @PostMapping("/delete/{id}")
+//    private Object delete(@PathVariable Integer id) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        AccountPrincipal userDetails = (AccountPrincipal) auth.getPrincipal();
+//        Information information = service.findById(id).orElseThrow(() -> new ItemNotFound("Information not found"));
+//        if(!information.getAccount().getId().equals(userDetails.getId())){
+//            throw new ItemNotFound("Information not found");
+//        }
+//        information.setDelFlag(DelFlag.DELETE);
+//        service.save(information);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+
+    private void checkUrl(Integer categoryId, InformationRequest request) {
+        if (service.existsByTypeAndUrlIn(categoryId, request.getUrlIn())) {
+            throw new ItemIsExisted("Url in is existed");
         }
-        if(service.existsByTypeAndUrlOut(categoryId, request.getUrlOut())){
-            throw new InformationExisted("Url out is existed");
+        if (service.existsByTypeAndUrlOut(categoryId, request.getUrlOut())) {
+            throw new ItemIsExisted("Url out is existed");
         }
     }
 
-    private void checkUrlEdit(Integer categoryId, Information information, InformationRequest request) throws Exception {
-        if(information.getCategory().getId().equals(categoryId)){
-            if(service.existsByTypeAndUrlInEdit(categoryId, request.getUrlIn(), request.getId())){
-                throw new InformationExisted("Url in is existed");
-            }
-            if(service.existsByTypeAndUrlOutEdit(categoryId, request.getUrlOut(), request.getId())){
-                throw new InformationExisted("Url out is existed");
-            }
-        }else{
-            checkUrl(categoryId, request);
-        }
-    }
 }

@@ -3,7 +3,7 @@ package com.example.projectdemo.model.type;
 import java.util.stream.Stream;
 
 public enum InformationStatusType {
-    ENABLE(1), DISABLE(2);
+    ACCEPT(1), REJECT(2), WAITING(3);
 
     Integer value;
 
